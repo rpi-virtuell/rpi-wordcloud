@@ -1,4 +1,6 @@
-
+/**
+ * @author Joachim happel
+ */
 
 wp.hooks.addAction( 'lzb.components.PreviewServerCallback.onChange', 'rpi.blocks.wordcloud', function ( props ) {
 

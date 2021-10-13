@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Joachim Happel
+ */
 
 Class  WPWordCloudBlock{
 

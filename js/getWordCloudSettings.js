@@ -1,5 +1,10 @@
+/**
+ * @author Niki Reinert
+ * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/js/wpWordCloud.js
+ */
+
 function getWordCloudSettings(element) {
-	
+
 	// transfer settings to word cloud object
     // the shortcode does not allowe camel case, but the
     // word cloud library has camel case settings
@@ -7,13 +12,13 @@ function getWordCloudSettings(element) {
     // to the word cloud library setting object
 
 	var settings = window[element.getAttribute('settings')];
-	
-	
+
+
 	var processedSettings = {};
-    
+
     // get array from object
     if (typeof(settings) !='undefined' && settings['list'] != null) {
-    
+
         processedSettings.list = [];
 
         for (var key in settings['list']) {
@@ -33,7 +38,7 @@ function getWordCloudSettings(element) {
 		processedSettings.blackList 	= {'includes':function(param){return }};
 		return processedSettings;
 	}
-	
+
 	processedSettings.frontendSettings 	= Boolean(settings['frontend-settings']);
     processedSettings.backgroundColor 	= settings['background-color'];
     processedSettings.color 	        = settings['color'];
@@ -60,7 +65,7 @@ function getWordCloudSettings(element) {
     processedSettings.canvasWidth 		= settings['canvas-width'];
     processedSettings.canvasHeight 		= settings['canvas-height'];
     processedSettings.minAlpha 			= settings['min-alpha'];
-    
+
     processedSettings.textTransform 	= settings['text-transform'];
 
     processedSettings.countWords 		= settings['count-words'];
@@ -71,7 +76,7 @@ function getWordCloudSettings(element) {
     processedSettings.enableBlackList 	= settings['enable-black-list'];
 
     if (processedSettings.enableBlackList  == 1) {
-        
+
         processedSettings.blackList		= settings['black-list'].split(' ');
 
     } else {
@@ -79,25 +84,25 @@ function getWordCloudSettings(element) {
         processedSettings.blackList 	= '';
 
     }
-    
+
     processedSettings.enableCustomBlackList 	= settings['enable-custom-black-list'];
     processedSettings.customBlackList 	= {};
 
     processedSettings.persistentCustomBlackList = settings['persistent-custom-black-list'];
-    
+
     processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
 
     processedSettings.enableOcr 	    = settings['enable-ocr'];
     processedSettings.ocrLanguage       = settings['ocr-language'];
-    processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];    
+    processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];
     processedSettings.maxImageSize      = parseInt(settings['max-image-size']);
-    
+
     processedSettings.debug 	        = settings['debug'];
 
     processedSettings.pluginPath 	    = settings['plugin-path'];
 
     if (processedSettings.debug == 1) {
-        
+
         console.log("[WP WordCloud] Init `" + processedSettings.id + "` -----------------");
         console.log({"WP WordCloud Settings" : processedSettings});
 
@@ -109,10 +114,10 @@ function getWordCloudSettings(element) {
 
             processedSettings.minWordOccurence = document.getElementById('word-cloud-setting-min-word-occurence-'+processedSettings.id).value
             processedSettings.sizeFactor = document.getElementById('word-cloud-setting-size-factor-'+processedSettings.id).value
-    
+
         }
     }
-    
+
     return processedSettings;
 
 }

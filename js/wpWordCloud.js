@@ -1,3 +1,9 @@
+/**
+ * @author Niki Reinert
+ * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/js/wpWordCloud.js
+ * adapted by Joachiom Happel
+ */
+
 (function ($) {
 
 	'use strict';

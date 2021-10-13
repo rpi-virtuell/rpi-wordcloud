@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author Niki Reinert
+ * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/php/initSettings.php
+ */
 
     add_action( 'admin_init', 'wp_word_cloud_register_settings' );
     add_action('admin_menu', 'wp_word_cloud_register_options_page');

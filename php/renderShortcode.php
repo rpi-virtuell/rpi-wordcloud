@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @author Niki Reinert
+ * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/php/renderShortcode.php
+ * adapted by Joachim Happel
+ */
 
 final class WPWordCloud {
 
@@ -82,7 +86,7 @@ final class WPWordCloud {
 
 		$this->settings['plugin-path'] = plugin_dir_url( __DIR__ );
 
-		debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings);
+		$this->debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings);
 
 	}
 
@@ -125,22 +129,7 @@ final class WPWordCloud {
 			 array( 'word-cloud-settings' )
 		);
 
-		if ($this->settings['enable-ocr'] == 1) {
 
-			wp_enqueue_script(
-				'tesseract-library',
-				plugin_dir_url( __DIR__ ) . 'lib/tesseract.min.js',
-				array( 'jquery' )
-		   );
-
-		   wp_enqueue_script(
-			'init-ocr',
-			plugin_dir_url( __DIR__ ) . 'js/initOcr.js',
-			array( 'word-cloud' )
-
-	   		);
-
-		}
 	}
 
 	private function getDataFromSource($source) {
@@ -207,4 +196,28 @@ final class WPWordCloud {
 
 
 	}
+	/**
+	 *	log function to send debug information to browser console
+	 *
+	 */
+	function debug_wp_word_cloud($message = NULL, $individual_settings= NULL ){
+
+		// on settings page, debug level will be defined
+		// MAX_DEBUG_PRIORITY = 0 - no messages at all
+		// MAX_DEBUG_PRIORITY = 1 - errors & warnings only
+		// MAX_DEBUG_PRIORITY = 2 - every piece of information
+
+		$debug = isset($individual_settings['debug']) ? $individual_settings['debug'] : FALSE;
+
+		if (($debug == TRUE OR $debug == 1 OR $debug == '1') AND is_admin() == FALSE) {
+
+			$message = json_encode($message, JSON_PRETTY_PRINT);
+
+			echo "<script>console.log('WORDCLOUD|DEBUG: ' + ".$message.");</script>";
+
+		}
+
+	}
 }
+
+
