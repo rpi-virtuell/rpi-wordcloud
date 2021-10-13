@@ -1,0 +1,7 @@
+
+*.code-workspace
+.DS_Store
+lib/*.traineddata.gz
+lib/tesseract-core.wasm.js
+lib/worker.min.js
+.idea/
