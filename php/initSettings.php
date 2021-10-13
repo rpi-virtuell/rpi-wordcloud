@@ -84,10 +84,8 @@
             ?>
               <div>
               <?php screen_icon(); ?>
-              <h2>WP Word-Cloud</h2>
-              <p>Hier kannst du die Standardeinstellungen anpassen. Die Standard-Einstellungen können überschrieben werden, wenn du den Parameter direkt im Shortcode übergibst.
-                  Zum Beispiel: [rpi-wordcloud source-type="url"][/rpi-wordcloud]
-              </p>
+              <h2>WordCloud</h2>
+              <p>Hier kannst du die Standardeinstellungen anpassen.</p>
               <form method="post" action="options.php">
               <?php settings_fields( 'wp_word_cloud_settings' ); ?>
               <h3>Einstellungen</h3>
