@@ -1,6 +1,11 @@
-# WordCloud
+# rpi WordCloud
 A Gutenberg Editor Block for WordPress to display cloud words from any text. Based on the WP Word Cloud Plugin from nickyreinert.
 Developed for the relilab's OER Maker Space (my.relilab.org)
+
+Stellt einen Gutenberg-Block zum Generieren von grafischen Wortwolken auf der Grundlage eines  beliebigen Textes zur Verfügung. 
+Erlaubt Seitenbesuchern, die Darstellung und Fokussierung der Wortwolke temporär zu manipulieren. 
+Das Plugin wurde auf der Codebasis des WP Word Cloud Plugins von Niki Reinert weiterentwickelt, welches ursprünglich nur über shortcodes zu konfigurieren war.
+Die Konfiguration geschieht nun auschließlich über einen wysiwyg Block. 
 
 ## What is a word cloud?
 A word cloud visualizes occurences of words from a text. It counts the words and places them on a canvas. Based on the occurence of each word it calculates the size of the word. 
@@ -23,8 +28,11 @@ and the ingenious javascript library wordcloud2.js by TimDream (https://github.c
 
 # Screenshots
 
-**Beispiel Editor**
+**Editor**
 ![](assets/editor.png)
 ----
-**Beispiel Frontend**
+**Frontend**
 ![](assets/relilab-context.png)
+----
+**Visitor Options**
+![](assets/fronten-edit.png)
