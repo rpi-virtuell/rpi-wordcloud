@@ -26,6 +26,6 @@ in the blockeditor choose the Wordcloud Block. Insert your Text. Configure the w
 This plugin is based on the excellent work of Nicky Reinert: https://github.com/nickyreinert/wordCloud-for-Wordpress
 and the ingenious javascript library wordcloud2.js by TimDream (https://github.com/timdream/wordcloud2.js/)
 
-#Screenshots
+# Screenshots
 
 ![](assets/relilab-context.png)
