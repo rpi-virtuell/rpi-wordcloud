@@ -5,7 +5,7 @@
  * adapted by Joachim Happel
  */
 
-final class WPWordCloud {
+final class rpiWordCloud {
 
 	private $pluginName = 'rpi-wordcloud';
 	private $version = '1.0.0';
@@ -39,17 +39,20 @@ final class WPWordCloud {
 
 		$global_settings = [];
 
-		foreach (wp_word_cloud_get_global_settings() as $name => $value) {
+		foreach (rpiWordCloudSettings::wp_word_cloud_get_global_settings() as $name => $value) {
+
+			$value = get_option(rpiWordCloudSettings::$prefix.$name, $value['default']);
+			$value = apply_filters('rpi_word_cloud_settings',$value,$name);
 
 			// if global setting is a public one
 			// get it's name and the value, which user defines on settings page
 			if ($value['hidden'] === FALSE) {
 
-				$global_settings[$name] = get_option($name, $value['default']);
+				$global_settings[$name] = $value;
 
 			// otherwise set this value to NULL
 			} else {
-				$global_settings[$name] = get_option($name, $value['default']);
+				$global_settings[$name] = $value;
 				//$global_settings[$name] = NULL;
 
 			}
@@ -74,8 +77,6 @@ final class WPWordCloud {
 				break;
 
 		}
-
-
 		// check if required mandatory setting is given in shortcode
 		// id needs to be unique, as you can use the shortcode multiple times
 		if ($this->settings['id'] == NULL) {
@@ -188,13 +189,10 @@ final class WPWordCloud {
 
 		/*get_option('wp_word_cloud_settings');
 
-		foreach(wp_word_cloud_get_global_settings() as $name=>$value){
-			$option[$name]= get_option($name);
+		foreach(rpiWordCloudSettings::wp_word_cloud_get_global_settings() as $name=>$value){
+			$option[$name]= get_option(rpiWordCloudSettings::$prefix.$name);
 		}*/
 		return '<script id="word-cloud-settings-'.$this->settings['id'].'">'.json_encode($this->settings).'</script>';
-
-
-
 	}
 	/**
 	 *	log function to send debug information to browser console

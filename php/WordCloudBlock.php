@@ -12,35 +12,45 @@ Class  WPWordCloudBlock{
 		add_filter( 'lzb/prepare_block_attribute', array('WPWordCloudBlock', 'wordcloud_lzb_prepare_block_attribute'), 10, 5 );
 		add_filter( 'lazyblock/wordcloud/frontend_callback', array($this,'frontend'), 10, 2 );
 		add_filter( 'lazyblock/wordcloud/editor_callback', array($this,'editor'), 10, 2 );
-		add_filter( 'wp_word_cloud_get_global_settings', array($this,'filter_settings'), 10, 1 );
+		add_filter( 'rpi_word_cloud_settings', array($this,'filter_settings'), 10, 2 );
+
+		$LZB_DIR = WP_PLUGIN_DIR .'/lazy-blocks/';
+
+		if(file_exists($LZB_DIR . 'lazy-blocks.php')){
+			include_once $LZB_DIR . 'lazy-blocks.php';
+		}
+
+
 	}
 
 
 	/**
-	 * reduce settingoptions for wordcloud2.js
-	 *
-	 * @param $settings
-	 * @return $settings
+	 * fix settings
 	 */
-	public function filter_settings($settings){
+	public function filter_settings( $value, $name ){
 
+		$option = array();
+		$option['source-type']= 'inline';
+		$option['frontend-settings']= true;
+		$option['style']= 'canvas';
+		$option['enable-black-list']= true;
+		$option['enable-custom-black-list']= true;
+		$option['persistent-custom-black-list']= true;
+		$option['draw-out-of-bound']= false;
+		$option['enable-ocr']= false;
+		$option['ocr-local-libraries']= false;
+		$option['frontend-settings']= true;
+		$option['min-size']= 8;
+		$option['count-words']= true;
+		$option['ellipticity']= 1;
+		$option['ignore-chars']= "[\(\)\[\]\,\.\;\:\?\!]";
+		$option['ocr-language']= 'deu';
 
-		$settings['source-type']= ['default' => 'inline', 'valid' => ['inline'], 'hidden' => true, 'description' => ''];
-		$settings['frontend-settings']= ['default' => true, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['style']= ['default' => 'canvas', 'valid' => ['canvas'], 'hidden' => true, 'description' => ''];
-		$settings['enable-black-list']= ['default' => true, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['enable-custom-black-list']= ['default' => true, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['persistent-custom-black-list']= ['default' => true, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['draw-out-of-bound']= ['default' => false, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['enable-ocr']= ['default' => false, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['ocr-local-libraries']= ['default' => false, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['frontend-settings']= ['default' => true, 'valid' => 'bool', 'hidden' => true, 'description' => ''];
-		$settings['min-size']= ['default' => 8, 'hidden' => true, 'description' => ''];
-		$settings['count-words']= ['default' => 1, 'hidden' => true, 'description' => ''];
-		$settings['ellipticity']= ['default' => 1, 'hidden' => false, 'description' => 'bla'];
-		$settings['ignore-chars']= ['default' => '[\(\)\[\]\,\.\;\:\?\!]', 'hidden' => true, 'description' => ''];
-		$settings['ocr-language']= ['default' => 'deu', 'hidden' => true, 'description' => ''];
-		return $settings;
+		rpiWordCloudSettings::$hide_settings = array_keys($option);
+
+		$value = isset($option[$name])? $option[$name] : $value;
+
+		return $value;
 	}
 
 
@@ -64,7 +74,7 @@ Class  WPWordCloudBlock{
 	function editor($output, $attributes){
 
 		$attributes['background-color']=preg_replace('/var\([^,]*,\s?([^\)]*)\)/','$1',$attributes['background-color']);
-		$wc = new WPWordCloud();
+		$wc = new rpiWordCloud();
 		$attributes['id'] = $attributes['blockId'];
 		$wc->initWordCloudBlock( $attributes, $attributes['source'] );
 
@@ -111,7 +121,7 @@ Class  WPWordCloudBlock{
 		// Change default value for custom control "blacklist"
 		if($control && isset( $control['type'] ) && $control['type']=='textarea' && $control['name']=='black-list' && $block['slug']=='lazyblock/wordcloud'){
 
-			$attribute_data['default'] = get_option('black-list', true);
+			$attribute_data['default'] = get_option(rpiWordCloudSettings::$prefix.'black-list');
 		}
 
 		return $attribute_data;

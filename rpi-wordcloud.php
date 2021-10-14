@@ -28,5 +28,5 @@ if ( ! defined( 'WPINC' ) ) {
 
 	require_once( 'php/WordCloudBlock.php' );
 
-	add_shortcode('rpi-wordcloud',[new WPWordCloud, 'initWordCloud']);
+	add_shortcode('rpi-wordcloud',[new rpiWordCloud, 'initWordCloud']);
 

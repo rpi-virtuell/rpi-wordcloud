@@ -3,22 +3,31 @@
  * @author Niki Reinert
  * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/php/initSettings.php
  */
+class rpiWordCloudSettings{
 
-    add_action( 'admin_init', 'wp_word_cloud_register_settings' );
-    add_action('admin_menu', 'wp_word_cloud_register_options_page');
+    static $prefix = 'rpiwcloud_';
+    static $hide_settings = array();
 
-    /**
+    function __construct(){
+
+	    add_action( 'admin_init', ['rpiWordCloudSettings','wp_word_cloud_register_settings'] );
+	    add_action('admin_menu', [$this,'wp_word_cloud_register_options_page']);
+
+    }
+	/**
 	 * Return object of global settings, default values and
 	 * and description
-     *
+	 *
 	 */
 
-    function wp_word_cloud_get_global_settings() {
+	static function wp_word_cloud_get_global_settings() {
 
-        return apply_filters('wp_word_cloud_get_global_settings',[
+        $noise ="ab aber abgesehen alle allein aller alles als am an andere anderen anderenfalls anderer anderes anstatt auch auf aus aussen außen ausser außer ausserdem außerdem außerhalb ausserhalb behalten bei beide beiden beider beides beinahe bevor bin bis bist bitte da daher danach dann darueber darüber darueberhinaus darüberhinaus darum das dass daß dem den der des deshalb die diese diesem diesen dieser dieses dort duerfte duerften duerftest duerftet dürfte dürften dürftest dürftet durch durfte durften durftest durftet ein eine einem einen einer eines einige einiger einiges entgegen entweder erscheinen es etwas fast fertig fort fuer für gegen gegenueber gegenüber gehalten geht gemacht gemaess gemäß genug getan getrennt gewesen gruendlich gründlich habe haben habt haeufig häufig hast hat hatte hatten hattest hattet hier hindurch hintendran hinter hinunter ich ihm ihnen ihr ihre ihrem ihren ihrer ihres ihrige ihrigen ihriges immer in indem innerhalb innerlich irgendetwas irgendwelche irgendwenn irgendwo irgendwohin ist jede jedem jeden jeder jedes jedoch jemals jemand jemandem jemanden jemandes jene jung junge jungem jungen junger junges kann kannst kaum koennen koennt koennte koennten koenntest koenntet können könnt könnte könnten könntest könntet konnte konnten konntest konntet machen macht machte mehr mehrere mein meine meinem meinen meiner meines meistens mich mir mit muessen müssen muesst müßt muß muss musst mußt nach nachdem naechste nächste nebenan nein nichts niemand niemandem niemanden niemandes nirgendwo nur oben obwohl oder oft ohne pro sagte sagten sagtest sagtet scheinen sehr sei seid seien seiest seiet sein seine seinem seinen seiner seines seit selbst sich sie sind so sogar solche solchem solchen solcher solches sollte sollten solltest solltet sondern statt stets tatsächlich tatsaechlich tief tun tut ueber über ueberall überall um und uns unser unsere unserem unseren unserer unseres unten unter unterhalb usw viel viele vielleicht von vor vorbei vorher vorueber vorüber waehrend während wann war waren warst wart was weder wegen weil weit weiter weitere weiterem weiteren weiterer weiteres welche welchem welchen welcher welches wem wen wenige wenn wer werde werden werdet wessen wie wieder wir wird wirklich wirst wo wohin wuerde wuerden wuerdest wuerdet würde würden würdest würdet wurde wurden wurdest wurdet ziemlich zu zum zur zusammen zwischen";
+
+		return [
 			'source-type'		=> ['default' => 'url',                 'valid' => ['inline', 'url', 'sql', 'custom-field', 'id', 'tags'], 'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind url, inline, sql, post oder page id sowie custom-field'],
 			'count-words'	    => ['default' => false,                 'valid' => 'bool',   'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
-            'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
+			'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
 			'enable-ocr'        => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
 			'style'	            => ['default' => 'canvas',              'valid' => ['canvas', 'html'], 'hidden' => false, 'description' => 'Du kannst eine WordCloud als Canvas (also Bild) oder mit HTML-Tags erstellen.'],
 			'ocr-language'      => ['default' => 'deu',                 'hidden' => false, 'description' => 'Eine Liste unterstützter Sprachen und ihr Kürzel findest du hier: https://tesseract-ocr.github.io/tessdoc/Data-Files#data-files-for-version-400-november-29-2016. Du kannst mehrere Sprache mit Plus getrennt angeben (deu+eng).'],
@@ -26,22 +35,22 @@
 			'max-image-size'    => ['default' => '1024',                'hidden' => false, 'description' => 'Die maximale Höhe bzw. Breite des Bildes (je nachdem, was überschritten wird).'],
 			'min-word-length'	=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie lange muss ein Wort mindestens sein, um gezählt zu werden?'],
 			'min-word-occurence'=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie oft muss ein Wort mindestens vorkommen, um in der Word Cloud gezeichnet zu werden?'],
-			'black-list'     	=> ['default' => 'der die das',         'valid' => 'text','hidden' => false, 'description' => 'Wörter (z.B. Funktionswörter), die beim Zählen ignoriert werden sollen. Die Wörter werden hier mit Leerzeichen getrennt angegeben.'],
+			'black-list'     	=> ['default' => $noise,                'valid' => 'text','hidden' => false, 'description' => 'Wörter (z.B. Funktionswörter), die beim Zählen ignoriert werden sollen. Die Wörter werden hier mit Leerzeichen getrennt angegeben.'],
 			'enable-black-list'	=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Nutze die Blacklist.'],
 			'enable-custom-black-list'	=> ['default' => 1,             'valid' => 'bool', 'hidden' => false, 'description' => 'Soll der Nutzer Wörter per Klick aus der Wortcloud entfernen können?'],
 			'persistent-custom-black-list'	=> ['default' => 1,         'valid' => 'bool','hidden' => false, 'description' => 'Bleibt die benutzerdefinierte Blacklist erhalten, wenn der Nutzer einen neuen Text hinzufügt?'],
 			'ignore-chars'		=> ['default' => '\(\)\[\]\,\.;',       'hidden' => false, 'description' => 'Regulärer Ausdruck um bestimmte Zeichen beim Zählen von Wörtern zu ignorieren.'],
 			'text-transform'	=> ['default' => 'uppercase',           'valid' => ['uppercase', 'lowercase', 'none'], 'hidden' => false, 'description' => 'Sollen alle Wörter groß- oder kleingeschrieben werden?'],
-            'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => 'Der Mindestwert für die Transparenz der Wörter. Setze den Wert auf 1 für gar keine Transparenz.'],
-            'size-factor'		=> ['default' => 100,                   'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
-            'frontend-settings'	=> ['default' => false,                 'valid' => 'bool', 'hidden' => false, 'description' => 'Erlaubt das Anpassen von einigen Parametern direkt im Frontend.'],
+			'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => 'Der Mindestwert für die Transparenz der Wörter. Setze den Wert auf 1 für gar keine Transparenz.'],
+			'size-factor'		=> ['default' => 100,                   'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
+			'frontend-settings'	=> ['default' => false,                 'valid' => 'bool', 'hidden' => false, 'description' => 'Erlaubt das Anpassen von einigen Parametern direkt im Frontend.'],
 
-            'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => 'Lege die Breite des Canvas fest.'],
+			'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => 'Lege die Breite des Canvas fest.'],
 			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => 'Lege die Höhe des Canvas fest.'],
 
-            'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => 'Der Hintergrund des Canvas. Nutze entweder die rgba() oder Hex-Angabe.'],
-            'color'	            => ['default' => 'black',               'valid' => ['red', 'green', 'blue', 'orange', 'random-dark', 'turkey', 'violett', 'random-light'], 'hidden' => false, 'description' => 'Farbe der Wörter als CSS. Alternativ random-dark oder random-light für zufällige Farben.'],
-            'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Hiermit kannst du die Abstände zwischen den Wörtern erhöhen.'],
+			'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => 'Der Hintergrund des Canvas. Nutze entweder die rgba() oder Hex-Angabe.'],
+			'color'	            => ['default' => 'black',               'valid' => ['red', 'green', 'blue', 'orange', 'random-dark', 'turkey', 'violett', 'random-light'], 'hidden' => false, 'description' => 'Farbe der Wörter als CSS. Alternativ random-dark oder random-light für zufällige Farben.'],
+			'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Hiermit kannst du die Abstände zwischen den Wörtern erhöhen.'],
 			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => 'Die CSS-Angabe für die verwendete Schriftart.'],
 			'min-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie groß muss ein Wort sein, um in der WordCloud angezeigt zu werden?'],
 			'font-weight'		=> ['default' => 'bold',                'hidden' => false, 'description' => 'Das Gewicht der Wörter (bold, normal oder z.B. als Ziffer: 100)'],
@@ -56,102 +65,101 @@
 			'clear-canvas'		=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Soll die Zeichenfläche vor jedem Durchlauf neu gezeichnet werden?'],
 			'debug'     		=> ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Wenn du Probleme mit dem Plugin hast, kannst du hier die Ausgabe von zusätzlichen Informationen in der Konsole des Browsers aktivieren.'],
 
-            'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
+			'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
 			'list'				=> ['default' => [],                    'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],
 			'data'				=> ['default' => NULL,                  'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
 
-        ]);
+		];
 
-    }
+	}
+	static function wp_word_cloud_register_settings() {
 
-    function wp_word_cloud_register_settings() {
-
-//        var_dump(wp_word_cloud_get_global_settings());die();
-
-
-        foreach (wp_word_cloud_get_global_settings() as $name => $value) {
-            add_option($name, $value['default']);
-            register_setting( 'wp_word_cloud_settings', $name);
-//	        delete_option($name);
-//	        unregister_sidebar('wp_word_cloud_settings', $name);
-        }
+		foreach (self::wp_word_cloud_get_global_settings() as $name => $setting) {
+			$value = apply_filters('rpi_word_cloud_settings',$setting['default'],$name);
+            add_option(self::$prefix.$name, $value);
+			register_setting( 'rpi_word_cloud_settings', self::$prefix.$name);
+		}
 
 
-    }
+	}
+	function wp_word_cloud_register_options_page() {
 
-    function wp_word_cloud_register_options_page() {
+		add_options_page('rpi Word-Cloud', 'rpi Word-Cloud', 'manage_options', 'rpi-wordcloud', ['rpiWordCloudSettings','wp_word_cloud_options_page']);
 
-        add_options_page('rpi Word-Cloud', 'rpi Word-Cloud', 'manage_options', 'rpi-wordcloud', 'wp_word_cloud_options_page');
+	}
 
-    }
+	static function wp_word_cloud_options_page() {
+		// TODO: Pretify Settings Page
+		?>
+        <div>
+			<?php screen_icon(); ?>
+            <h2>WordCloud</h2>
+            <p>Hier kannst du die Standardeinstellungen anpassen.</p>
+            <form method="post" action="options.php">
+				<?php settings_fields( 'rpi_word_cloud_settings' ); ?>
+                <h3>Einstellungen</h3>
+                <table>
+					<?php
 
-    function wp_word_cloud_options_page() {
-            // TODO: Pretify Settings Page
-            ?>
-              <div>
-              <?php screen_icon(); ?>
-              <h2>WordCloud</h2>
-              <p>Hier kannst du die Standardeinstellungen anpassen.</p>
-              <form method="post" action="options.php">
-              <?php settings_fields( 'wp_word_cloud_settings' ); ?>
-              <h3>Einstellungen</h3>
-              <table>
-              <?php
-                    foreach (wp_word_cloud_get_global_settings() as $name => $value) {
-                        echo '<tr><td>'.is_bool(get_option($name)).'</td></tr>';
 
-                        if ($value['hidden'] === FALSE) {
 
-                            echo '<tr valign="top"><td scope="row">';
-                                echo '<label for="'.$name.'">'.$name.'</label>';
-                            echo '</td><td>';
+					foreach (self::wp_word_cloud_get_global_settings() as $name => $value) {
 
-                            // add select input if it's a limited option
-
-                            if (isset($value['valid'])) {
-
-                                if (is_array($value['valid'])) {
-
-                                    echo '<select name="'.$name.'" size=1>';
-                                    foreach ($value['valid'] as $key => $option) {
-
-                                        echo '<option value="'.$option.'" '.selected(get_option($name), $option).'>'.$option.'</option>';
-
-                                    }
-                                    echo '</select>';
-
-                                } else if ($value['valid'] == 'text') {
-
-                                    echo '<textarea id="'.$name.'" name="'.$name.'">'.get_option($name).'</textarea>';
-
-                                // add checkbox if it is a true/false option
-                                } else if ($value['valid'] == 'bool') {
-
-                                    echo '<input type="checkbox" id="'.$name.'" value=1 name="'.$name.'" '.checked(1, get_option($name), false).'>';
-
-                                }
-
-                            // if no valid-option is given, just handle this as a text option
-                            } else {
-
-                                echo '<input type="text" id="'.$name.'" name="'.$name.'" value="'.esc_attr(get_option($name)).'"';
-
-                            }
-
-                            echo '</td><td>';
-                            echo $value['description'];
-                            echo '</td></tr>';
-
+                        if(in_array($name,self::$hide_settings)){
+                            continue;
                         }
 
-                    }
-              ?>
-              </table>
-              <?php  submit_button(); ?>
-              </form>
-              </div>
-         <?php
-    }
+						//echo '<tr><td>'.is_bool(get_option(self::$prefix.$name)).'</td></tr>';
+						if ($value['hidden'] === FALSE) {
 
+							echo '<tr valign="top"><td scope="row">';
+							echo '<label for="'.$name.'">'.$name.'</label>';
+							echo '</td><td>';
 
+							// add select input if it's a limited option
 
+							if (isset($value['valid'])) {
+
+								if (is_array($value['valid'])) {
+
+									echo '<select name="'.self::$prefix.$name.'" size=1>';
+									foreach ($value['valid'] as $key => $option) {
+										echo '<option value="'.$option.'" '.selected(get_option(self::$prefix.$name), $option).'>'.$option.'</option>';
+
+									}
+									echo '</select>';
+
+								} else if ($value['valid'] == 'text') {
+									echo '<textarea id="'.$name.'" name="'.self::$prefix.$name.'">'.get_option(self::$prefix.$name).'</textarea>';
+
+									// add checkbox if it is a true/false option
+								} else if ($value['valid'] == 'bool') {
+
+									echo '<input type="checkbox" id="'.$name.'" value=1 name="'.self::$prefix.$name.'" '.checked(1, get_option(self::$prefix.$name), false).'>';
+
+								}
+
+								// if no valid-option is given, just handle this as a text option
+							} else {
+
+								echo '<input type="text" id="'.$name.'" name="'.self::$prefix.$name.'" value="'.esc_attr(get_option(self::$prefix.$name)).'"';
+
+							}
+
+							echo '</td><td>';
+							echo $value['description'];
+							echo '</td></tr>';
+
+						}
+
+					}
+					?>
+                </table>
+				<?php  submit_button(); ?>
+            </form>
+        </div>
+		<?php
+	}
+
+}
+new rpiWordCloudSettings();
