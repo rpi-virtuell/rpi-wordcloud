@@ -51,26 +51,10 @@
 
 		wpwc(wpWordCloudSettings, "Added canvas");
 
-		// add black list container
-		// contains words clicked by user
-		if (wpWordCloudSettings.enableCustomBlackList == 1) {
-
-			wpwc(wpWordCloudSettings, "Added black list container");
-
-			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
-			//$(this).append('<label for="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">Ignore-Liste anwenden</label>');
-
-		}
-		if (wpWordCloudSettings.enableCustomBlackList == 1 || wpWordCloudSettings.enableBlackList == 1) {
-
-			$(this).append('<input checked type="checkbox" class="activate-black-list hidden" id="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'" name="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">');
-
-		}
-
 		// add container where user can edit settings from frontend
 		if (wpWordCloudSettings.enableFrontendEdit == true) {
 
-			$(this).append('<table class="borderless"><tr><td>'+
+			$(this).append('<table class="borderless" style="min-height: fit-content"><tr><td>'+
 				'<label for="word-cloud-setting-min-word-occurence" class="word-cloud-setting-min-word-occurence-label">'+
 				'Wortvorkommen:'+
 				'</label>'+
@@ -100,6 +84,34 @@
 
 		})
 
+
+		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
+
+			$(this).append('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'" style="min-height:80px;"></textarea>');
+			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.data);
+
+
+
+			wpwc(wpWordCloudSettings, "Added edit field");
+
+		}
+		// contains words clicked by user
+		if (wpWordCloudSettings.enableCustomBlackList == 1) {
+
+			$(this).append('<p id="word-cloud-black-list-' + wpWordCloudSettings.id + '"></p>');
+			wpwc(wpWordCloudSettings, "Added black list container");
+			if (wpWordCloudSettings.enableFrontendEdit == 1){
+				$(this).append('<input checked type="checkbox" class="activate-black-list" id="word-cloud-activate-black-list-' + wpWordCloudSettings.id + '" name="word-cloud-activate-black-list-' + wpWordCloudSettings.id + '">');
+				$(this).append('<label for="word-cloud-activate-black-list-' + wpWordCloudSettings.id + '">Ignorierte Worte ausblenden</label>');
+			}else{
+				$(this).append('<input checked type="checkbox" style="display:none;" id="word-cloud-activate-black-list-' + wpWordCloudSettings.id + '">');
+			}
+
+		}
+		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
+			$(this).append('<button class="render-word-cloud button" id="render-word-cloud-'+wpWordCloudSettings.id+'">Wortwolke aktualisieren</button>');
+
+		}
 		if (wpWordCloudSettings.countWords == 1) {
 
 			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
@@ -110,18 +122,6 @@
 		if (wpWordCloudSettings.debug == 1) {
 
 			console.log({"WP WordCloud Words" : wpWordCloudSettings.list});
-
-		}
-
-		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
-
-			$(this).append('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'" style="min-height:80px;"></textarea>');
-			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.data);
-			$(this).append('<button class="render-word-cloud button" id="render-word-cloud-'+wpWordCloudSettings.id+'">Text aktualisieren</button>');
-
-
-
-			wpwc(wpWordCloudSettings, "Added edit field");
 
 		}
 
@@ -140,7 +140,7 @@
 				wpWordCloudSettings);
 
 		} else {
-
+			wpwc(wpWordCloudSettings, 'start WordCloud');
 			WordCloud(
 				$('#word-cloud-' + wpWordCloudSettings.id)[0],
 				wpWordCloudSettings);

@@ -49,7 +49,7 @@ final class WPWordCloud {
 
 			// otherwise set this value to NULL
 			} else {
-
+				$global_settings[$name] = get_option($name, $value['default']);
 				//$global_settings[$name] = NULL;
 
 			}

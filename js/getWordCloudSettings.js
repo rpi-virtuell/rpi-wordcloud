@@ -97,14 +97,14 @@ function getWordCloudSettings(element) {
     processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];
     processedSettings.maxImageSize      = parseInt(settings['max-image-size']);
 
-    processedSettings.debug 	        = settings['debug'];
+    processedSettings.debug 	        = 1;//settings['debug'];
 
     processedSettings.pluginPath 	    = settings['plugin-path'];
 
     if (processedSettings.debug == 1) {
 
-        console.log("[WP WordCloud] Init `" + processedSettings.id + "` -----------------");
-        console.log({"WP WordCloud Settings" : processedSettings});
+        console.log("[rpi WordCloud] Init `" + processedSettings.id + "` -----------------");
+        console.log({"rpi WordCloud Settings" : processedSettings});
 
     }
 

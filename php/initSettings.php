@@ -66,12 +66,14 @@
 
     function wp_word_cloud_register_settings() {
 
+//        var_dump(wp_word_cloud_get_global_settings());die();
+
 
         foreach (wp_word_cloud_get_global_settings() as $name => $value) {
-
             add_option($name, $value['default']);
             register_setting( 'wp_word_cloud_settings', $name);
-
+//	        delete_option($name);
+//	        unregister_sidebar('wp_word_cloud_settings', $name);
         }
 
 
@@ -79,7 +81,7 @@
 
     function wp_word_cloud_register_options_page() {
 
-        add_options_page('WP Word-Cloud', 'WP Word-Cloud', 'manage_options', 'rpi-wordcloud', 'wp_word_cloud_options_page');
+        add_options_page('rpi Word-Cloud', 'rpi Word-Cloud', 'manage_options', 'rpi-wordcloud', 'wp_word_cloud_options_page');
 
     }
 
