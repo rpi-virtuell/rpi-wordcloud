@@ -1,4 +1,3 @@
-
 .black-list-item {
     padding-right: 10px;
 }
@@ -175,31 +174,3 @@ input.activate-black-list{
 .word-cloud-container button.render-word-cloud{
 	float:right;
 }
-/*
-.word-cloud-container input {
-    width: 80%;
-    margin: 1em auto;
-    display: block;
-}
-.word-cloud-container input[type="checkbox"] {
-    width: auto;
-	margin: 0.6rem 0.6rem 0 0px;
-	display: block;
-	float: left;
-}
-
-.word-cloud-container textarea {
-    width: 80%;
-    margin: 0 auto;
-    display: block;
-}
-
-.word-cloud-container button.render-word-cloud,
-.word-cloud-container button.text-from-image {
-    width: 40%;
-    display: block;
-    margin: 0.5em auto;
-    border-radius: 10px;
-    background-color: #00a3d3;
-}
-*/
