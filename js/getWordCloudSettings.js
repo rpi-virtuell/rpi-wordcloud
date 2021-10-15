@@ -1,6 +1,10 @@
 /**
- * @author Niki Reinert
+ * Copyright (c) 2018 nickyreinert
+ * Released under the MIT license
+ *
+ * @author Niki Reinert (origin)
  * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/js/wpWordCloud.js
+ * forked by Joachim Happel
  */
 
 function getWordCloudSettings(element) {

@@ -3,29 +3,45 @@
  * @author Joachim Happel
  */
 
-Class  WPWordCloudBlock{
+Class  WordCloudBlock{
 
 	public function __construct() {
+		if(!defined('LZB_PATH')){
+			define( 'LZB_PATH', WP_PLUGIN_DIR . '/lazy-blocks/' );
+		}
 
-		add_action('init', array('WPWordCloudBlock','init_word_cloud_block'));
-		add_action( 'enqueue_block_assets',array('WPWordCloudBlock','wordcloud_blockeditor_js') );
-		add_filter( 'lzb/prepare_block_attribute', array('WPWordCloudBlock', 'wordcloud_lzb_prepare_block_attribute'), 10, 5 );
+
+		if(!file_exists(LZB_PATH . 'lazy-blocks.php')){
+
+			function dependency_error() {
+				$class = 'notice notice-error is-dismissible';
+				$message = __( 'Fehler! Für den Gutenberg Block "Wordcloud" wird das Plugin "Custom Blocks Constructor - Lazy Blocks" benötigt. Bitte installiere es jetzt. Aktivieren ist nicht notwendig!', 'rpi-word-cloud' );
+
+				printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+			}
+			add_action( 'admin_notices', 'dependency_error' );
+
+			return;
+		}else{
+			require_once LZB_PATH . 'lazy-blocks.php';
+		}
+
+		add_action('init', array( 'WordCloudBlock','init_word_cloud_block'));
+		add_action('admin_head', array( 'WordCloudBlock','styling'));
+		add_action( 'enqueue_block_assets',array( 'WordCloudBlock','wordcloud_blockeditor_js') );
+		add_filter( 'lzb/prepare_block_attribute', array( 'WordCloudBlock', 'wordcloud_lzb_prepare_block_attribute'), 10, 5 );
 		add_filter( 'lazyblock/wordcloud/frontend_callback', array($this,'frontend'), 10, 2 );
 		add_filter( 'lazyblock/wordcloud/editor_callback', array($this,'editor'), 10, 2 );
 		add_filter( 'rpi_word_cloud_settings', array($this,'filter_settings'), 10, 2 );
 
-		$LZB_DIR = WP_PLUGIN_DIR .'/lazy-blocks/';
-
-		if(file_exists($LZB_DIR . 'lazy-blocks.php')){
-			include_once $LZB_DIR . 'lazy-blocks.php';
-		}
-
-
 	}
 
+	public function add_css(){
+		echo(__CLASS__);die();
+	}
 
 	/**
-	 * fix settings
+	 * fixed settings
 	 */
 	public function filter_settings( $value, $name ){
 
@@ -74,7 +90,7 @@ Class  WPWordCloudBlock{
 	function editor($output, $attributes){
 
 		$attributes['background-color']=preg_replace('/var\([^,]*,\s?([^\)]*)\)/','$1',$attributes['background-color']);
-		$wc = new rpiWordCloud();
+		$wc = new WordCloudShortcode();
 		$attributes['id'] = $attributes['blockId'];
 		$wc->initWordCloudBlock( $attributes, $attributes['source'] );
 
@@ -104,12 +120,12 @@ Class  WPWordCloudBlock{
 
 		wp_enqueue_script(
 			'word-cloud',
-			plugin_dir_url( __DIR__ ) . 'js/wpWordCloud.js',
+			plugin_dir_url( __DIR__ ) . 'js/rpiWordCloud.js',
 			array( 'word-cloud-settings' )
 		);
 		wp_enqueue_script(
 			'word-cloud-block',
-			plugin_dir_url( __DIR__ ) . 'js/editor.js',
+			plugin_dir_url( __DIR__ ) . 'js/blockEditor.js',
 			array( 'word-cloud-settings' )
 		);
 
@@ -127,6 +143,9 @@ Class  WPWordCloudBlock{
 		return $attribute_data;
 	}
 
+	static function styling(){
+		echo '<style id="lazy_blocks_handle">.lazyblock .lzb-content-title {display: none;}"</style>';
+	}
 	/*
 	required plugin: lazy-blocks  (muss installiert aber nicht aktiv sein)
 	*/
@@ -295,11 +314,12 @@ Class  WPWordCloudBlock{
 						'placeholder' => '',
 						'characters_limit' => '',
 					),
-					'control_6969a642fd' => array(
+
+					'control_6969a642gd' => array(
 						'type' => 'range',
-						'name' => 'min-alpha',
-						'default' => '0.3',
-						'label' => 'Min. Alpha-Wert',
+						'name' => 'min-word-length',
+						'default' => '2',
+						'label' => 'Min. Wortlänge',
 						'help' => '',
 						'child_of' => '',
 						'placement' => 'inspector',
@@ -308,9 +328,28 @@ Class  WPWordCloudBlock{
 						'save_in_meta' => 'false',
 						'save_in_meta_name' => '',
 						'required' => 'false',
-						'min' => '0.1',
-						'max' => '1',
-						'step' => '0.1',
+						'min' => '2',
+						'max' => '10',
+						'step' => '1',
+						'placeholder' => '',
+						'characters_limit' => '',
+					),
+					'control_5454a642gd' => array(
+						'type' => 'range',
+						'name' => 'max-rotation',
+						'default' => '2',
+						'label' => 'Rotation (Grad)',
+						'help' => '',
+						'child_of' => '',
+						'placement' => 'inspector',
+						'width' => '100',
+						'hide_if_not_selected' => 'false',
+						'save_in_meta' => 'false',
+						'save_in_meta_name' => '',
+						'required' => 'false',
+						'min' => '30',
+						'max' => '360',
+						'step' => '10',
 						'placeholder' => '',
 						'characters_limit' => '',
 					),
@@ -387,9 +426,7 @@ Class  WPWordCloudBlock{
 						'save_in_meta' => 'false',
 						'save_in_meta_name' => '',
 						'required' => 'false',
-						'min' => '300',
-						'max' => '1024',
-						'step' => '5',
+						'alpha' => 'true',
 						'placeholder' => '',
 						'characters_limit' => '',
 					),
@@ -466,7 +503,7 @@ Class  WPWordCloudBlock{
 					),
 				),
 				'code' => array(
-					'output_method' => 'php',
+					'output_method' => 'class',
 					'editor_html' => '',
 					'editor_callback' => '',
 					'editor_css' => '',
@@ -485,4 +522,4 @@ Class  WPWordCloudBlock{
 
 }
 
-new WPWordCloudBlock();
+new WordCloudBlock();

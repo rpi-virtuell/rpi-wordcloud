@@ -1,32 +1,20 @@
 <?php
 /**
+ * Copyright (c) 2018 nickyreinert
+ * Released under the MIT license
+ *
  * @author Niki Reinert
- * @see https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/php/renderShortcode.php
- * adapted by Joachim Happel
+ * @see (origin) https://github.com/nickyreinert/wordCloud-for-Wordpress/blob/wordCloud-for-wordPress-2/php/renderShortcode.php
+ * recoded by Joachim Happel
  */
 
-final class rpiWordCloud {
-
-	private $pluginName = 'rpi-wordcloud';
-	private $version = '1.0.0';
+final class WordCloudShortcode {
 
 	private $error = NULL;
 
-    public function __construct() {
+    public function __construct() {}
 
-		//?
-		add_filter( 'get_word_cloud_instance', [ $this, 'get_instance' ] );
-
-	}
-
-    public function get_instance() {
-
-		return $this; // return the object
-
-    }
-
-
-	/**
+    /**
 	 * Get global settings from settings page and
 	 * overwrite with individual settings from shortcode
 	 *
@@ -107,7 +95,7 @@ final class rpiWordCloud {
 
 		wp_enqueue_style(
 			$this->pluginName,
-			plugin_dir_url( __DIR__ ) . 'css/wpWordCloud.css',
+			plugin_dir_url( __DIR__ ) . 'css/rpiWordCloud.css',
 			array(),
 			$this->version,
 			'all' );
@@ -126,7 +114,7 @@ final class rpiWordCloud {
 
 		wp_enqueue_script(
 			 'word-cloud',
-			 plugin_dir_url( __DIR__ ) . 'js/wpWordCloud.js',
+			 plugin_dir_url( __DIR__ ) . 'js/rpiWordCloud.js',
 			 array( 'word-cloud-settings' )
 		);
 
@@ -185,13 +173,6 @@ final class rpiWordCloud {
 		return $output;
 	}
 	public function get_settings(){
-		$option = array();
-
-		/*get_option('wp_word_cloud_settings');
-
-		foreach(rpiWordCloudSettings::wp_word_cloud_get_global_settings() as $name=>$value){
-			$option[$name]= get_option(rpiWordCloudSettings::$prefix.$name);
-		}*/
 		return '<script id="word-cloud-settings-'.$this->settings['id'].'">'.json_encode($this->settings).'</script>';
 	}
 	/**
