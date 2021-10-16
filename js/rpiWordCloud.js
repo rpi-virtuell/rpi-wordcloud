@@ -10,6 +10,7 @@
 
 	'use strict';
 
+
 	// init
 	// go through all word cloud containers
 	// to receive word cloud settings
@@ -17,7 +18,10 @@
 
 		var wpWordCloudSettings = getWordCloudSettings(this);
 
+		wpWordCloudSettings.counted_words=[];
+
 		wpwc(wpWordCloudSettings, "Read settings");
+
 
 		if (wpWordCloudSettings.data == null && wpWordCloudSettings.list == null) {
 
@@ -117,7 +121,6 @@
 		if (wpWordCloudSettings.countWords == 1) {
 
 			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
-
 			wpwc(wpWordCloudSettings, "Counted words");
 		}
 
@@ -135,6 +138,7 @@
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
 
 		if (wpWordCloudSettings.style == 'html') {
+
 
 			WordCloud(
 				[$('#word-cloud-' + wpWordCloudSettings.id)[0],
@@ -208,8 +212,6 @@
 
 	});
 	$('.change-word-cloud').change(function(e) {
-
-		console.log(e);
 
 		var elem = document.getElementById('word-cloud-container-'+e.target.getAttribute('dataid'));
 
@@ -350,27 +352,15 @@
 		$.each(purgedTextArray, function(index, word) {
 
 			if (word.length >= settings.minWordLength) {
-
 				if (word in wordList) {
-
 					wordList[word]['abs'] += 1
-					wordList[word]['rel'] = 100 * wordList[word]['abs']  / wordCount
-					wordList[word]['wdf'] = Math.log2(wordList[word]['abs'] + 1) / Math.log2(wordCount)
-
 				} else {
 
 					wordList[word] = {
 						'abs' : 1,
-						'rel' : 100 / wordCount,
-						'wdf' : Math.log2(2) / Math.log2(wordCount)
-
 					};
-
 				}
-
 			}
-
-
 		});
 
 
@@ -378,9 +368,12 @@
 
 		$.each(wordList, function(index, word) {
 
-			settings.list[index] = Math.round(word['abs']);
+			settings.list[index] = word['abs'];
 
 		})
+
+		settings.counted_words = wordList;
+
 
 		return prepareWordList(settings);
 
@@ -498,7 +491,9 @@
 
 			if (item != undefined) {
 
-				$('#word-cloud-tooltip-' + settings.id).text(Math.round(item[1],0));
+				let counts = settings.counted_words[item[0]].abs;
+
+				$('#word-cloud-tooltip-' + settings.id).text(counts);
 
 				$('#word-cloud-tooltip-' + settings.id).toggle();
 
