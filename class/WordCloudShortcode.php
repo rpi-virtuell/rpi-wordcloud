@@ -94,7 +94,7 @@ final class WordCloudShortcode {
 	private function enqueueDepencies() {
 
 		wp_enqueue_style(
-			$this->pluginName,
+			'word-cloud-style',
 			plugin_dir_url( __DIR__ ) . 'css/rpiWordCloud.css',
 			array(),
 			$this->version,
