@@ -16,6 +16,8 @@ wp.hooks.addAction( 'lzb.components.PreviewServerCallback.onChange', 'rpi.blocks
 
 	var container = document.getElementById('word-cloud-container-'+props.attributes.blockId);
 
+
+
 	var wpWordCloudSettings = JSON.parse(wpWordCloudSettings_row);
 	wpWordCloudSettings.data = props.attributes.source;
 	wpWordCloudSettings.colors = props.attributes.color;
@@ -47,7 +49,7 @@ wp.hooks.addAction( 'lzb.components.PreviewServerCallback.onChange', 'rpi.blocks
 
 	console.log(wpWordCloudSettings);
 
-	jQuery('#'+container.id).append('<canvas id="'+canvasId+'" class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'"></canvas>');
+	jQuery('#'+container.id).append('<canvas id="'+canvasId+'" class="word-cloud" style="width: 100%; max-width: 100vh; max-height: 100vh;" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'"></canvas>');
 
 
 	WordCloud(document.getElementById('word-cloud-' + wpWordCloudSettings.id),wpWordCloudSettings);

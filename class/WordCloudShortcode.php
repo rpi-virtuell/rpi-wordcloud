@@ -72,6 +72,7 @@ final class WordCloudShortcode {
 			$this->error = 'No unique id given. Please use parameter `id`.';
 
 		}
+		$this->settings['min-rotation'] = $this->settings['max-rotation']*-1;
 
 		$this->settings['plugin-path'] = plugin_dir_url( __DIR__ );
 
