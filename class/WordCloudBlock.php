@@ -25,7 +25,7 @@ Class  WordCloudBlock{
 		}else{
 			require_once LZB_PATH . 'lazy-blocks.php';
 		}
-
+		add_filter( 'lzb/show_admin_menu', '__return_false' );
 		add_action('init', array( 'WordCloudBlock','init_word_cloud_block'));
 		add_action('admin_head', array( 'WordCloudBlock','styling'));
 		add_action( 'enqueue_block_assets',array( 'WordCloudBlock','wordcloud_blockeditor_js') );
